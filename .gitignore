@@ -1,6 +1,5 @@
-.php_cs.cache
 /vendor/
-/.idea/
-/nbproject/
+/test/fixture/recipe/tmp/
+.php_cs.cache
 *.phar
-/.vagrant
+phpunit.xml

@@ -5,19 +5,24 @@
  * file that was distributed with this source code.
  */
 
+namespace Deployer;
+
 require_once __DIR__ . '/common.php';
 
 task('deploy', [
+    'deploy:info',
     'deploy:prepare',
+    'deploy:lock',
     'deploy:release',
     'deploy:update_code',
     'deploy:shared',
     'deploy:symlink',
+    'deploy:unlock',
     'cleanup'
 ]);
 
-//Set drupal site. Change if you use different site
-env('drupal_site', 'default');
+//Set Drupal 7 site. Change if you use different site
+set('drupal_site', 'default');
 
 
 //Drupal 7 shared dirs
@@ -25,12 +30,12 @@ set('shared_dirs', [
     'sites/{{drupal_site}}/files',
 ]);
 
-//Drupal 7 sharef files
+//Drupal 7 shared files
 set('shared_files', [
     'sites/{{drupal_site}}/settings.php',
 ]);
 
-//Drupal 7 Writable dirs
+//Drupal 7 writable dirs
 set('writable_dirs', [
     'sites/{{drupal_site}}/files',
 ]);
@@ -42,11 +47,11 @@ task('drupal:settings', function () {
         $basepath = dirname(__FILE__) . '/drupal7';
 
         //Import secrets
-        $secrets = env('settings');
+        $secrets = get('settings');
 
         //Prepare replacement variables
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($secrets)
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveArrayIterator($secrets)
         );
 
         $replacements = [];
@@ -74,7 +79,6 @@ task('drupal:settings', function () {
 
         unlink($tmpFilename);
     }
-
 });
 
 //Upload Drupal 7 files folder

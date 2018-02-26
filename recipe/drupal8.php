@@ -5,19 +5,24 @@
  * file that was distributed with this source code.
  */
 
+namespace Deployer;
+
 require_once __DIR__ . '/common.php';
 
 task('deploy', [
+    'deploy:info',
     'deploy:prepare',
+    'deploy:lock',
     'deploy:release',
     'deploy:update_code',
     'deploy:shared',
     'deploy:symlink',
+    'deploy:unlock',
     'cleanup'
 ]);
 
 //Set drupal site. Change if you use different site
-env('drupal_site', 'default');
+set('drupal_site', 'default');
 
 
 //Drupal 8 shared dirs
